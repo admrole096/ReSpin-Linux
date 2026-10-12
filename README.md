@@ -1,4 +1,5 @@
 # ReSpin-Linux
+(indev, no working verions yet!)
 
 [![License: GPL v3](https://shields.io)](https://gnu.org)
 [![Linux](https://shields.io)]()
