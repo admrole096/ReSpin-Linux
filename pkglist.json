@@ -1,0 +1,205 @@
+{
+  "id": "root",
+  "question": "Choose Kernel 0.1:",
+  "options": [
+    { "label": "Linux 6.12 LTS", "value": "6.12_lts", "next": "kernel_update" },
+    { "label": "Linux 6.18 LTS", "value": "6.18_lts", "next": "kernel_update" },
+    { "label": "Current newest", "value": "newest", "next": "kernel_update" },
+    { "label": "Current newest LTS", "value": "newest_lts", "next": "kernel_update" },
+    { "label": "Current newest ZEN", "value": "newest_zen", "next": "kernel_update" },
+    { "label": "Custom (from pkgs/custom/kernel/)", "value": "custom", "next": "kernel_update" }
+  ],
+  "subsequent_nodes": {
+    "kernel_update": {
+      "id": "kernel_update",
+      "question": "Do you want to enable auto-updating the kernel?",
+      "options": [
+        { "label": "Yes (No guarantee with custom)", "value": true, "next": "busybox" },
+        { "label": "No (The safe choice for old hardware/custom)", "value": false, "next": "busybox" }
+      ]
+    },
+    "busybox": {
+      "id": "busybox",
+      "question": "Choose Busybox:",
+      "options": [
+        { "label": "Yes (recommended for lightweight tools and options)", "value": true, "next": "coreutils_with_busybox" },
+        { "label": "No", "value": false, "next": "coreutils_without_busybox" }
+      ]
+    },
+    "coreutils_with_busybox": {
+      "id": "coreutils",
+      "question": "Choose GNU Coreutils (with Busybox active):",
+      "options": [
+        { "label": "Yes (duplicate tools with busybox, yet won't break the system)", "value": true, "next": "init_system" },
+        { "label": "No (recommended)", "value": false, "next": "init_system" }
+      ]
+    },
+    "coreutils_without_busybox": {
+      "id": "coreutils",
+      "question": "Choose GNU Coreutils (without Busybox):",
+      "options": [
+        { "label": "Yes (primary provider of system utilities / recommended)", "value": true, "next": "init_system" },
+        { "label": "No (system will lack essential standard utilities, yet won't break the system)", "value": false, "next": "init_system" }
+      ]
+    },
+    "init_system": {
+      "id": "init_system",
+      "question": "Choose Init System:",
+      "options": [
+        { "label": "systemd", "value": "systemd", "next": "bootloader" },
+        { "label": "runit", "value": "runit", "next": "bootloader" },
+        { "label": "OpenRC", "value": "openrc", "next": "bootloader" },
+        { "label": "busybox init", "value": "busybox", "next": "bootloader" }
+      ]
+    },
+    "bootloader": {
+      "id": "bootloader",
+      "question": "Choose Bootloader:",
+      "options": [
+        { "label": "GRUB2", "value": "grub2", "next": "pkg_manager" },
+        { "label": "Limine", "value": "limine", "next": "pkg_manager" },
+        { "label": "EFISTUB", "value": "efistub", "next": "pkg_manager" },
+        { "label": "None" "value": "none", "next": "pkg_manager" },
+        { "label": "Custom (pkgs/custom/bootloader/)", "value": "custom", "next": "pkg_manager" }
+      ]
+    },
+    "pkg_manager": {
+      "id": "pkg_manager",
+      "question": "Choose Package Manager (auto-enables kernel updates if applicable):",
+      "options": [
+        { "label": "xbps (glibc, rolling-release)", "value": "xbps_glibc", "next": "network_stack" }
+        { "label": "xbps (musl, rolling-release)", "value": "xbps_musl", "next": "network_stack" },
+        { "label": "[Alpine's] apk (glibc, stable)", "value": "apk_glibc_stable", "next": "network_stack" },
+        { "label": "[Alpine's] apk (glibc, rolling-release)", "value": "apk_glibc_rolling", "next": "network_stack },
+        { "label": "pacman (glibc, rolling-release)", "value": "pacman", "next": "network_stack" },
+        {
+          "label": "apt (glibc, stable)",
+          "value": "apt",
+          "next": "network_stack"
+        },
+        {
+          "label": "dnf (glibc, semi-rolling)",
+          "value": "pkg_dnf",
+          "kernel_update": true,
+          "next": "network_stack"
+        },
+        {
+          "label": "None",
+          "value": "pkg_none",
+          "kernel_update": false,
+          "next": "network_stack"
+        },
+        {
+          "label": "Custom (pkgs/custom/pkgmgr/)",
+          "value": "pkg_custom",
+          "kernel_update": false,
+          "next": "network_stack"
+        }
+      ]
+    },
+    "network_stack": {
+      "id": "network_stack",
+      "question": "Choose Network Stack:",
+      "options": [
+        {
+          "label": "iwd + busybox-dhcpc",
+          "value": "net_iwd_bbdhcp",
+          "next": "firewall"
+        },
+        {
+          "label": "iwd + dhcpcd",
+          "value": "net_iwd_dhcpcd",
+          "next": "firewall"
+        },
+        {
+          "label": "iwd",
+          "value": "net_iwd",
+          "next": "firewall"
+        },
+        {
+          "label": "wpa_supplicant + busybox-dhcpc",
+          "value": "net_wpa_bbdhcp",
+          "next": "firewall"
+        },
+        {
+          "label": "wpa_supplicant + dhcpcd",
+          "value": "net_wpa_dhcpcd",
+          "next": "firewall"
+        },
+        {
+          "label": "wpa_supplicant",
+          "value": "net_wpa",
+          "next": "firewall"
+        },
+        {
+          "label": "NetworkManager",
+          "value": "net_nm",
+          "next": "firewall"
+        },
+        {
+          "label": "None",
+          "value": "net_none",
+          "next": "firewall"
+        }
+      ]
+    },
+    "firewall": {
+      "id": "firewall",
+      "question": "Choose Firewall:",
+      "options": [
+        {
+          "label": "iptables",
+          "value": "fw_iptables",
+          "next": "ufw"
+        },
+        {
+          "label": "iptables + iptables6",
+          "value": "fw_iptables_ipv6",
+          "next": "ufw"
+        },
+        {
+          "label": "nftables",
+          "value": "fw_nftables",
+          "next": "ufw"
+        },
+        {
+          "label": "nftables + nftables6",
+          "value": "fw_nftables_ipv6",
+          "next": "ufw"
+        },
+        {
+          "label": "None",
+          "value": "fw_none",
+          "next": "ufw"
+        }
+      ]
+    },
+    "ufw": {
+      "id": "ufw",
+      "question": "Enable UFW (Uncomplicated Firewall):",
+      "options": [
+        {
+          "label": "Yes",
+          "value": "ufw_yes",
+          "next": "shell"
+        },
+        {
+          "label": "No",
+          "value": "ufw_no",
+          "next": "shell"
+        }
+      ]
+    },
+    "shell": {
+      "id": "shell",
+      "question": "Choose Default Shell:",
+      "options": [
+        { "label": "ash (busybox)", "value": "ash", "next": null },
+        { "label": "bash", "value": "bash", "next": null},
+        { "label": "zsh", "value": "zsh", "next": null },
+        { "label": "fish", "value": "fish", "next": null }
+      ]
+    }
+  }
+}
+

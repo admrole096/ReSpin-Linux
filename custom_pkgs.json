@@ -1,0 +1,13 @@
+"pkgs": {
+  "root": "6.18_lts",
+  "kernel_update": "true",
+  "busybox": "false",
+  "coreutils_without_busybox": "coreutils_no",
+  "init_system": "init_busybox",
+  "bootloader": "bootloader_none",
+  "pkg_manager": "pkg_none",
+  "network_stack": "net_none",
+  "firewall": "fw_none",
+  "ufw": "ufw_no",
+  "shell": "shell_ash"
+}
